@@ -4,20 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.UUID;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class UserDTO {
+public class ClientDTO {
     private UUID uuid;
-    private String prenom;
+
     private String nom;
-    private String username;
-    private String password;
+
+    private String prenom;
+
     private String mail;
+
+    private String username;
+
+    private String password;
+
     private String tel;
-    private Date dateNaissance;
-    private String role;
 }
