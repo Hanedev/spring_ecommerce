@@ -11,8 +11,6 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class OrderDTO {
     private UUID uuid;
 

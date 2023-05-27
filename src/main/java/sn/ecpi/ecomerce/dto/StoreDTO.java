@@ -7,8 +7,7 @@ import sn.ecpi.ecomerce.entite.User;
 
 import java.util.UUID;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Data
 public class StoreDTO {
     private UUID uuid;
