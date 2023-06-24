@@ -34,7 +34,7 @@ public class UserService {
 
     }
 
-    public  User createUser(User user){
+    public User createUser(User user){
         return userRepos.save(user);
     }
 
