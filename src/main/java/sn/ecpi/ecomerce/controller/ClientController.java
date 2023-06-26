@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.ecpi.ecomerce.dto.ClientDTO;
+import sn.ecpi.ecomerce.dto.PasswordDTO;
 import sn.ecpi.ecomerce.entite.Client;
+import sn.ecpi.ecomerce.pojo.ClientPOJO;
 import sn.ecpi.ecomerce.service.ClientService;
 
 import java.util.List;
@@ -25,43 +27,51 @@ public class ClientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ClientDTO>> getAllClients() {
+    public ResponseEntity<List<ClientPOJO>> getAllClients() {
         List<Client> clients = clientService.getAllClients();
-        List<ClientDTO> clientDTOs = clients.stream()
-                .map(client -> modelMapper.map(client, ClientDTO.class))
+        List<ClientPOJO> clientPOJOs = clients.stream()
+                .map(client -> modelMapper.map(client, ClientPOJO.class))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(clientDTOs);
+        return ResponseEntity.ok(clientPOJOs);
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<ClientDTO> getClientByUUID(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<ClientPOJO> getClientByUUID(@PathVariable("uuid") UUID uuid) {
         Client client = clientService.findByUuid(uuid);
         if (client != null) {
-            ClientDTO clientDTO = modelMapper.map(client, ClientDTO.class);
-            return ResponseEntity.ok(clientDTO);
+            ClientPOJO clientPOJO = modelMapper.map(client, ClientPOJO.class);
+            return ResponseEntity.ok(clientPOJO);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
-        Client client = modelMapper.map(clientDTO, Client.class);
-        Client createdClient = clientService.createClient(client);
-        ClientDTO createdClientDTO = modelMapper.map(createdClient, ClientDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdClientDTO);
+    public ResponseEntity<ClientPOJO> createClient(@RequestBody ClientDTO clientDTO) {
+
+        Client createdClient = clientService.createClient(clientDTO);
+        ClientPOJO createdClientPOJO = modelMapper.map(createdClient, ClientPOJO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdClientPOJO);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<ClientDTO> updateClient(
+    public ResponseEntity<ClientPOJO> updateClient(
             @PathVariable("uuid") UUID uuid,
             @RequestBody ClientDTO clientDTO) {
-        Client client = modelMapper.map(clientDTO, Client.class);
-        Client updatedClient = clientService.updateClient(uuid, client);
+
+        Client updatedClient = clientService.updateClient(uuid, clientDTO);
         if (updatedClient != null) {
-            ClientDTO updatedClientDTO = modelMapper.map(updatedClient, ClientDTO.class);
-            return ResponseEntity.ok(updatedClientDTO);
+            ClientPOJO updatedClientPOJO = modelMapper.map(updatedClient, ClientPOJO.class);
+            return ResponseEntity.ok(updatedClientPOJO);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/password/{uuid}")
+    public ResponseEntity<ClientPOJO> updatePassword(@PathVariable UUID uuid, @RequestBody PasswordDTO passwordDTO){
+        Client client = clientService.updatePassword(uuid, passwordDTO);
+
+        ClientPOJO clientResponse = modelMapper.map(client, ClientPOJO.class);
+        return ResponseEntity.ok().body(clientResponse);
     }
 
     @DeleteMapping("/{uuid}")

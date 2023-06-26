@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.ecpi.ecomerce.dto.ProduitDTO;
 import sn.ecpi.ecomerce.entite.Produit;
+import sn.ecpi.ecomerce.pojo.ProduitPOJO;
 import sn.ecpi.ecomerce.service.ProduitService;
 
 import java.util.List;
@@ -26,41 +27,41 @@ public class ProduitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProduitDTO>> getAllProduits() {
+    public ResponseEntity<List<ProduitPOJO>> getAllProduits() {
         List<Produit> produits = produitService.getAllProduit();
-        List<ProduitDTO> produitDTOs = produits.stream()
-                .map(produit -> modelMapper.map(produit, ProduitDTO.class))
+        List<ProduitPOJO> produitPOJOs = produits.stream()
+                .map(produit -> modelMapper.map(produit, ProduitPOJO.class))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(produitDTOs);
+        return ResponseEntity.ok(produitPOJOs);
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<ProduitDTO> getProduitByUUID(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<ProduitPOJO> getProduitByUUID(@PathVariable("uuid") UUID uuid) {
         Produit produit = produitService.findByUuid(uuid);
         if (produit != null) {
-            ProduitDTO produitDTO = modelMapper.map(produit, ProduitDTO.class);
-            return ResponseEntity.ok(produitDTO);
+            ProduitPOJO produitPOJO = modelMapper.map(produit, ProduitPOJO.class);
+            return ResponseEntity.ok(produitPOJO);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<ProduitDTO> createProduit(@RequestBody ProduitDTO produitDTO) {
-        Produit produit = modelMapper.map(produitDTO, Produit.class);
-        Produit createdProduit = produitService.createProduit(produit);
-        ProduitDTO createdProduitDTO = modelMapper.map(createdProduit, ProduitDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduitDTO);
+    public ResponseEntity<ProduitPOJO> createProduit(@RequestBody ProduitDTO produitDTO) {
+
+        Produit createdProduit = produitService.createProduit(produitDTO);
+        ProduitPOJO createdProduitPOJO = modelMapper.map(createdProduit, ProduitPOJO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduitPOJO);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<ProduitDTO> updateProduit(
+    public ResponseEntity<ProduitPOJO> updateProduit(
             @PathVariable("uuid") UUID uuid,
             @RequestBody ProduitDTO produitDTO) {
-        Produit produit = modelMapper.map(produitDTO, Produit.class);
-        Produit updatedProduit = produitService.updateProduit(uuid, produit);
+
+        Produit updatedProduit = produitService.updateProduit(uuid, produitDTO);
         if (updatedProduit != null) {
-            ProduitDTO updatedProduitDTO = modelMapper.map(updatedProduit, ProduitDTO.class);
-            return ResponseEntity.ok(updatedProduitDTO);
+            ProduitPOJO updatedProduitPOJO = modelMapper.map(updatedProduit, ProduitPOJO.class);
+            return ResponseEntity.ok(updatedProduitPOJO);
         }
         return ResponseEntity.notFound().build();
     }

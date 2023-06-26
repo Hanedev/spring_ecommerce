@@ -2,9 +2,11 @@ package sn.ecpi.ecomerce.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import sn.ecpi.ecomerce.dto.OrderDTO;
 import sn.ecpi.ecomerce.entite.Order;
 import sn.ecpi.ecomerce.repos.OrderRepos;
 
@@ -16,6 +18,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class OrderService {
+
+    private final ModelMapper modelMapper;
 
     public final OrderRepos orderRepos;
 
@@ -35,11 +39,13 @@ public class OrderService {
 
     }
 
-    public  Order createOrder(Order order){
+    public  Order createOrder(OrderDTO orderDTO){
+        Order order = modelMapper.map(orderDTO, Order.class);
         return orderRepos.save(order);
     }
 
-    public Order updateOrder(UUID uuid, Order orderResquest){
+    public Order updateOrder(UUID uuid, OrderDTO orderDTO){
+        Order orderResquest = modelMapper.map(orderDTO, Order.class);
         Order order = orderRepos.findById(uuid)
                 .orElseThrow(()->new ResourceAccessException("Order not found"));
         order.setClient(orderResquest.getClient());

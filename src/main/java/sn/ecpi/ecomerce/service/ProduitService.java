@@ -2,8 +2,10 @@ package sn.ecpi.ecomerce.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import sn.ecpi.ecomerce.dto.ProduitDTO;
 import sn.ecpi.ecomerce.entite.Produit;
 import sn.ecpi.ecomerce.repos.ProduitRepos;
 
@@ -15,6 +17,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class ProduitService {
+
+    private final ModelMapper modelMapper;
+
     public final ProduitRepos produitRepos;
 
     public List<Produit> getAllProduit(){
@@ -31,11 +36,13 @@ public class ProduitService {
         }
     }
 
-    public  Produit createProduit(Produit produit){
+    public  Produit createProduit(ProduitDTO produitDTO){
+        Produit produit = modelMapper.map(produitDTO, Produit.class);
         return produitRepos.save(produit);
     }
 
-    public Produit updateProduit(UUID uuid, Produit produitResquest){
+    public Produit updateProduit(UUID uuid, ProduitDTO produitDTO){
+        Produit produitResquest = modelMapper.map(produitDTO, Produit.class);
         Produit produit = produitRepos.findById(uuid)
                 .orElseThrow(()->new ResourceAccessException("Produit not found"));
         produit.setDescription(produitResquest.getDescription());

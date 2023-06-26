@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.ecpi.ecomerce.dto.OrderDTO;
 import sn.ecpi.ecomerce.entite.Order;
+import sn.ecpi.ecomerce.pojo.OrderPOJO;
 import sn.ecpi.ecomerce.service.OrderService;
 
 import java.util.List;
@@ -26,41 +27,41 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+    public ResponseEntity<List<OrderPOJO>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
-        List<OrderDTO> orderDTOs = orders.stream()
-                .map(order -> modelMapper.map(order, OrderDTO.class))
+        List<OrderPOJO> orderPOJOs = orders.stream()
+                .map(order -> modelMapper.map(order, OrderPOJO.class))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(orderDTOs);
+        return ResponseEntity.ok(orderPOJOs);
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<OrderDTO> getOrderByUUID(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<OrderPOJO> getOrderByUUID(@PathVariable("uuid") UUID uuid) {
         Order order = orderService.findByUuid(uuid);
         if (order != null) {
-            OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
-            return ResponseEntity.ok(orderDTO);
+            OrderPOJO orderPOJO = modelMapper.map(order, OrderPOJO.class);
+            return ResponseEntity.ok(orderPOJO);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
-        Order order = modelMapper.map(orderDTO, Order.class);
-        Order createdOrder = orderService.createOrder(order);
-        OrderDTO createdOrderDTO = modelMapper.map(createdOrder, OrderDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderDTO);
+    public ResponseEntity<OrderPOJO> createOrder(@RequestBody OrderDTO orderDTO) {
+
+        Order createdOrder = orderService.createOrder(orderDTO);
+        OrderPOJO createdOrderPOJO = modelMapper.map(createdOrder, OrderPOJO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderPOJO);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<OrderDTO> updateOrder(
+    public ResponseEntity<OrderPOJO> updateOrder(
             @PathVariable("uuid") UUID uuid,
             @RequestBody OrderDTO orderDTO) {
-        Order order = modelMapper.map(orderDTO, Order.class);
-        Order updatedOrder = orderService.updateOrder(uuid, order);
+
+        Order updatedOrder = orderService.updateOrder(uuid, orderDTO);
         if (updatedOrder != null) {
-            OrderDTO updatedOrderDTO = modelMapper.map(updatedOrder, OrderDTO.class);
-            return ResponseEntity.ok(updatedOrderDTO);
+            OrderPOJO updatedOrderPOJO = modelMapper.map(updatedOrder, OrderPOJO.class);
+            return ResponseEntity.ok(updatedOrderPOJO);
         }
         return ResponseEntity.notFound().build();
     }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.ecpi.ecomerce.dto.StoreDTO;
 import sn.ecpi.ecomerce.entite.Store;
+import sn.ecpi.ecomerce.pojo.StorePOJO;
 import sn.ecpi.ecomerce.service.StoreService;
 
 import java.util.List;
@@ -26,41 +27,41 @@ public class StoreController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StoreDTO>> getAllStores() {
+    public ResponseEntity<List<StorePOJO>> getAllStores() {
         List<Store> stores = storeService.getAllStore();
-        List<StoreDTO> storeDTOs = stores.stream()
-                .map(store -> modelMapper.map(store, StoreDTO.class))
+        List<StorePOJO> storePOJOs = stores.stream()
+                .map(store -> modelMapper.map(store, StorePOJO.class))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(storeDTOs);
+        return ResponseEntity.ok(storePOJOs);
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<StoreDTO> getStoreByUUID(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<StorePOJO> getStoreByUUID(@PathVariable("uuid") UUID uuid) {
         Store store = storeService.findByUuid(uuid);
         if (store != null) {
-            StoreDTO storeDTO = modelMapper.map(store, StoreDTO.class);
-            return ResponseEntity.ok(storeDTO);
+            StorePOJO storePOJO = modelMapper.map(store, StorePOJO.class);
+            return ResponseEntity.ok(storePOJO);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<StoreDTO> createStore(@RequestBody StoreDTO storeDTO) {
-        Store store = modelMapper.map(storeDTO, Store.class);
-        Store createdStore = storeService.createStore(store);
-        StoreDTO createdStoreDTO = modelMapper.map(createdStore, StoreDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdStoreDTO);
+    public ResponseEntity<StorePOJO> createStore(@RequestBody StoreDTO storeDTO) {
+
+        Store createdStore = storeService.createStore(storeDTO);
+        StorePOJO createdStorePOJO = modelMapper.map(createdStore, StorePOJO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdStorePOJO);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<StoreDTO> updateStore(
+    public ResponseEntity<StorePOJO> updateStore(
             @PathVariable("uuid") UUID uuid,
             @RequestBody StoreDTO storeDTO) {
-        Store store = modelMapper.map(storeDTO, Store.class);
-        Store updatedStore = storeService.updateStore(uuid, store);
+
+        Store updatedStore = storeService.updateStore(uuid, storeDTO);
         if (updatedStore != null) {
-            StoreDTO updatedStoreDTO = modelMapper.map(updatedStore, StoreDTO.class);
-            return ResponseEntity.ok(updatedStoreDTO);
+            StorePOJO updatedStorePOJO = modelMapper.map(updatedStore, StorePOJO.class);
+            return ResponseEntity.ok(updatedStorePOJO);
         }
         return ResponseEntity.notFound().build();
     }

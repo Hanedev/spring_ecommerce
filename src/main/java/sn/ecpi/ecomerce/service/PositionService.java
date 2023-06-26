@@ -2,8 +2,10 @@ package sn.ecpi.ecomerce.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import sn.ecpi.ecomerce.dto.PositionDTO;
 import sn.ecpi.ecomerce.entite.Position;
 import sn.ecpi.ecomerce.repos.PositionRepos;
 
@@ -15,6 +17,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class PositionService {
+
+    private final ModelMapper modelMapper;
+
     public final PositionRepos positionRepos;
 
     public List<Position> getAllPositions(){
@@ -33,11 +38,13 @@ public class PositionService {
 
     }
 
-    public  Position createPosition(Position position){
+    public  Position createPosition(PositionDTO positionDTO){
+        Position position = modelMapper.map(positionDTO, Position.class);
         return positionRepos.save(position);
     }
 
-    public Position updatePosition(UUID uuid, Position positionResquest){
+    public Position updatePosition(UUID uuid, PositionDTO positionDTO){
+        Position positionResquest = modelMapper.map(positionDTO, Position.class);
         Position position = positionRepos.findById(uuid)
                 .orElseThrow(()->new ResourceAccessException("Position not found"));
         position.setLatitude(positionResquest.getLatitude());

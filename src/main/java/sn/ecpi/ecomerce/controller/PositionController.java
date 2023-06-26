@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sn.ecpi.ecomerce.dto.PositionDTO;
 import sn.ecpi.ecomerce.entite.Position;
+import sn.ecpi.ecomerce.pojo.PositionPOJO;
 import sn.ecpi.ecomerce.service.PositionService;
 
 import java.util.List;
@@ -27,41 +28,41 @@ public class PositionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PositionDTO>> getAllPositions() {
+    public ResponseEntity<List<PositionPOJO>> getAllPositions() {
         List<Position> positions = positionService.getAllPositions();
-        List<PositionDTO> positionDTOs = positions.stream()
-                .map(position -> modelMapper.map(position, PositionDTO.class))
+        List<PositionPOJO> positionPOJOs = positions.stream()
+                .map(position -> modelMapper.map(position, PositionPOJO.class))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(positionDTOs);
+        return ResponseEntity.ok(positionPOJOs);
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<PositionDTO> getPositionByUUID(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<PositionPOJO> getPositionByUUID(@PathVariable("uuid") UUID uuid) {
         Position position = positionService.findByUuid(uuid);
         if (position != null) {
-            PositionDTO positionDTO = modelMapper.map(position, PositionDTO.class);
-            return ResponseEntity.ok(positionDTO);
+            PositionPOJO positionPOJO = modelMapper.map(position, PositionPOJO.class);
+            return ResponseEntity.ok(positionPOJO);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<PositionDTO> createPosition(@RequestBody PositionDTO positionDTO) {
-        Position position = modelMapper.map(positionDTO, Position.class);
-        Position createdPosition = positionService.createPosition(position);
-        PositionDTO createdPositionDTO = modelMapper.map(createdPosition, PositionDTO.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPositionDTO);
+    public ResponseEntity<PositionPOJO> createPosition(@RequestBody PositionDTO positionDTO) {
+
+        Position createdPosition = positionService.createPosition(positionDTO);
+        PositionPOJO createdPositionPOJO = modelMapper.map(createdPosition, PositionPOJO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPositionPOJO);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<PositionDTO> updatePosition(
+    public ResponseEntity<PositionPOJO> updatePosition(
             @PathVariable("uuid") UUID uuid,
             @RequestBody PositionDTO positionDTO) {
-        Position position = modelMapper.map(positionDTO, Position.class);
-        Position updatedPosition = positionService.updatePosition(uuid, position);
+
+        Position updatedPosition = positionService.updatePosition(uuid, positionDTO);
         if (updatedPosition != null) {
-            PositionDTO updatedPositionDTO = modelMapper.map(updatedPosition, PositionDTO.class);
-            return ResponseEntity.ok(updatedPositionDTO);
+            PositionPOJO updatedPositionPOJO = modelMapper.map(updatedPosition, PositionPOJO.class);
+            return ResponseEntity.ok(updatedPositionPOJO);
         }
         return ResponseEntity.notFound().build();
     }

@@ -2,8 +2,10 @@ package sn.ecpi.ecomerce.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import sn.ecpi.ecomerce.dto.CategorieDTO;
 import sn.ecpi.ecomerce.entite.Categorie;
 import sn.ecpi.ecomerce.repos.CategorieRepos;
 
@@ -15,6 +17,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class CategorieService {
+    private final ModelMapper modelMapper;
+
     public final CategorieRepos categorieRepos;
 
     public List<Categorie> getAllCategories(){
@@ -33,11 +37,13 @@ public class CategorieService {
 
     }
 
-    public  Categorie createCategorie(Categorie categorie){
+    public  Categorie createCategorie(CategorieDTO categorieDTO){
+        Categorie categorie = modelMapper.map(categorieDTO, Categorie.class);
         return categorieRepos.save(categorie);
     }
 
-    public Categorie updateCategorie(UUID uuid, Categorie categorieResquest){
+    public Categorie updateCategorie(UUID uuid, CategorieDTO categorieDTO){
+        Categorie categorieResquest = modelMapper.map(categorieDTO, Categorie.class);
         Categorie categorie = categorieRepos.findById(uuid)
                 .orElseThrow(()->new ResourceAccessException("Categorie not found"));
         categorie.setCategorie(categorieResquest.getCategorie());

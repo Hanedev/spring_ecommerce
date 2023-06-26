@@ -2,9 +2,11 @@ package sn.ecpi.ecomerce.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import sn.ecpi.ecomerce.dto.StoreDTO;
 import sn.ecpi.ecomerce.entite.Store;
 import sn.ecpi.ecomerce.repos.StoreRepos;
 
@@ -16,6 +18,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class StoreService {
+
+    private final ModelMapper modelMapper;
+
     public final StoreRepos storeRepos;
 
     public List<Store> getAllStore(){
@@ -32,11 +37,13 @@ public class StoreService {
         }
     }
 
-    public  Store createStore(Store store){
+    public  Store createStore(StoreDTO storeDTO){
+        Store store = modelMapper.map(storeDTO, Store.class);
         return storeRepos.save(store);
     }
 
-    public Store updateStore(UUID uuid, Store storeResquest){
+    public Store updateStore(UUID uuid, StoreDTO storeDTO){
+        Store storeResquest = modelMapper.map(storeDTO, Store.class);
         Store store = storeRepos.findById(uuid)
                 .orElseThrow(()->new ResourceAccessException("Store not found"));
         store.setNom(storeResquest.getNom());
