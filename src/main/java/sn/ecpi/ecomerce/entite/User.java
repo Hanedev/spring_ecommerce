@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "user")
+@Table(name = "utilisateur")
 @Data
 @Entity
 public class User {

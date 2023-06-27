@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "produit")
+@Table(name = "produits")
 public class Produit {
     @Id
     private UUID uuid = UUID.randomUUID();

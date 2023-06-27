@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categorie")
+@Table(name = "categories")
 public class Categorie {
     @Id
     private UUID uuid = UUID.randomUUID();

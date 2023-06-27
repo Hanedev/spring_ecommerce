@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "position")
+@Table(name = "positions")
 public class Position {
     @Id
     private UUID uuid = UUID.randomUUID();
