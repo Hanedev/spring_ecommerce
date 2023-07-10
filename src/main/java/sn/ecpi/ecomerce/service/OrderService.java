@@ -51,7 +51,7 @@ public class OrderService {
         order.setClient(orderResquest.getClient());
         order.setDate(orderResquest.getDate());
         order.setPosition(orderResquest.getPosition());
-        order.setProduit(orderResquest.getProduit());
+        order.setProduits(orderResquest.getProduits());
         return orderRepos.save(order);
     }
 

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
 
@@ -31,7 +32,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("all")
     public List<UserPOJO>getAllUsers(){
         return userService.getAllUsers().stream().map(user->modelMapper.map(user,UserPOJO.class))
                 .collect(Collectors.toList());
@@ -44,7 +45,7 @@ public class UserController {
         return ResponseEntity.ok().body(userResponse);
     }
 
-    @PostMapping
+    @PostMapping("addUser")
     public ResponseEntity<UserPOJO> createUser(@RequestBody UserDTO userDTO){
         User user = userService.createUser(userDTO);
 

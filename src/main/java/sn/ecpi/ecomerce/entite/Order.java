@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,8 +21,8 @@ public class Order {
     @ManyToOne
     private Client client;
 
-    @ManyToOne
-    private Produit produit;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Produit> produits;
 
     private Date date;
 

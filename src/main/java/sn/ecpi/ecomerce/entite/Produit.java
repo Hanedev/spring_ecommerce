@@ -31,6 +31,9 @@ public class Produit {
     @ManyToOne
     private Store store;
 
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
 
 

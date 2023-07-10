@@ -23,9 +23,6 @@ spring:
 server:
   servlet:
     context-path: /api
+  port: 9090
 
-jwt:
-  expiration:
-    time: 3600000
 
-  secret: ${JWT_SECRET:firjegurehg}

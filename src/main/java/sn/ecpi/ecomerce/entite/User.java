@@ -32,12 +32,12 @@ public class User {
     private String tel;
 
     @Column(name = "date_naissance")
-    private Date dateNaissance;
+    private String dateNaissance;
 
 
     private String role;
 
-    public User(String prenom, String nom, String username, String password, String mail, String tel, Date dateNaissance, String role) {
+    public User(String prenom, String nom, String username, String password, String mail, String tel, String dateNaissance, String role) {
         this.prenom = prenom;
         this.nom = nom;
         this.username = username;
